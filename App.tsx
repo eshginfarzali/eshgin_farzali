@@ -1,14 +1,277 @@
-import React, { useEffect, useState } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import React, { useEffect, useRef, useState } from "react";
+import AnimatedCounter from "./components/AnimatedCounter";
+import AnimatedSection from "./components/AnimatedSection";
+import AnimatedText from "./components/AnimatedText";
 import BugGame from "./components/BugGame";
+import Card3D from "./components/Card3D";
 import CursorFollower from "./components/CursorFollower";
+import FloatingKeys from "./components/FloatingKeys";
 import FloatingMath from "./components/FloatingMath";
+import GlitchText from "./components/GlitchText";
+import InteractiveParticles from "./components/InteractiveParticles";
+import MagneticButton from "./components/MagneticButton";
 import MobileMockup from "./components/MobileMockup";
+import SkillBar from "./components/SkillBar";
+import TypingGame from "./components/TypingGame";
 import { EXPERIENCES, PROJECTS, SKILLS } from "./constants";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const App: React.FC = () => {
   const [scrolled, setScrolled] = useState(0);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [activeTab, setActiveTab] = useState("hero");
+  const heroRef = useRef<HTMLElement>(null);
+  const mainRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    // Hero entrance animation - daha sürətli və smooth
+    if (heroRef.current) {
+      const tl = gsap.timeline({
+        defaults: { ease: "power2.out" },
+      });
+
+      // Subtitle ilk görünür
+      tl.fromTo(
+        ".hero-subtitle",
+        {
+          opacity: 0,
+          y: 20,
+        },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.4,
+        },
+      )
+        // Title dərhal arxasından
+        .fromTo(
+          ".hero-title .text-white",
+          {
+            opacity: 0,
+            y: 40,
+          },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.6,
+            ease: "power3.out",
+          },
+          "-=0.2",
+        )
+        .fromTo(
+          ".hero-title span[style*='gradient']",
+          {
+            opacity: 0,
+            y: 40,
+          },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.6,
+            ease: "power3.out",
+          },
+          "-=0.4",
+        )
+        // Description
+        .fromTo(
+          ".hero-description",
+          {
+            opacity: 0,
+            y: 20,
+          },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.5,
+          },
+          "-=0.3",
+        )
+        // Stats
+        .fromTo(
+          ".hero-stats > div",
+          {
+            opacity: 0,
+            y: 20,
+            scale: 0.9,
+          },
+          {
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            duration: 0.4,
+            stagger: 0.08,
+            ease: "back.out(1.4)",
+          },
+          "-=0.3",
+        )
+        // Buttons
+        .fromTo(
+          ".hero-button",
+          {
+            opacity: 0,
+            y: 20,
+            scale: 0.95,
+          },
+          {
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            duration: 0.4,
+            stagger: 0.1,
+            ease: "back.out(1.4)",
+          },
+          "-=0.2",
+        );
+    }
+
+    // Parallax scrolling effect
+    gsap.to(".parallax-layer", {
+      yPercent: 30,
+      ease: "none",
+      scrollTrigger: {
+        trigger: heroRef.current,
+        start: "top top",
+        end: "bottom top",
+        scrub: 1,
+      },
+    });
+
+    // 3D geometric shapes scroll animations
+    gsap.to(".parallax-shape-1", {
+      rotationZ: 360,
+      y: 200,
+      x: -100,
+      scale: 1.5,
+      ease: "none",
+      scrollTrigger: {
+        trigger: heroRef.current,
+        start: "top top",
+        end: "bottom top",
+        scrub: 2,
+      },
+    });
+
+    gsap.to(".parallax-shape-2", {
+      y: -150,
+      x: 100,
+      rotationZ: -180,
+      scale: 0.8,
+      ease: "none",
+      scrollTrigger: {
+        trigger: heroRef.current,
+        start: "top top",
+        end: "bottom top",
+        scrub: 1.5,
+      },
+    });
+
+    gsap.to(".parallax-shape-3", {
+      y: 100,
+      x: -50,
+      scale: 2,
+      opacity: 0,
+      ease: "none",
+      scrollTrigger: {
+        trigger: heroRef.current,
+        start: "top top",
+        end: "bottom top",
+        scrub: 2,
+      },
+    });
+
+    gsap.to(".parallax-shape-4", {
+      rotationZ: -360,
+      y: 150,
+      x: 80,
+      scale: 1.3,
+      ease: "none",
+      scrollTrigger: {
+        trigger: heroRef.current,
+        start: "top top",
+        end: "bottom top",
+        scrub: 1.8,
+      },
+    });
+
+    gsap.to(".parallax-shape-5", {
+      y: -200,
+      x: -120,
+      scale: 1.8,
+      opacity: 0.2,
+      ease: "none",
+      scrollTrigger: {
+        trigger: heroRef.current,
+        start: "top top",
+        end: "bottom top",
+        scrub: 2.5,
+      },
+    });
+
+    // Blobs 3D movement on scroll
+    gsap.to(".parallax-blob-1", {
+      y: 100,
+      x: -50,
+      scale: 1.2,
+      ease: "none",
+      scrollTrigger: {
+        trigger: heroRef.current,
+        start: "top top",
+        end: "bottom top",
+        scrub: 1,
+      },
+    });
+
+    gsap.to(".parallax-blob-2", {
+      y: -80,
+      x: 60,
+      scale: 0.9,
+      ease: "none",
+      scrollTrigger: {
+        trigger: heroRef.current,
+        start: "top top",
+        end: "bottom top",
+        scrub: 1.5,
+      },
+    });
+
+    gsap.to(".parallax-blob-3", {
+      y: 120,
+      x: -70,
+      scale: 1.4,
+      ease: "none",
+      scrollTrigger: {
+        trigger: heroRef.current,
+        start: "top top",
+        end: "bottom top",
+        scrub: 2,
+      },
+    });
+
+    // Project cards falling animation
+    gsap.utils.toArray<HTMLElement>(".project-card").forEach((card, i) => {
+      gsap.from(card, {
+        y: -100,
+        opacity: 0,
+        rotation: -5,
+        scale: 0.9,
+        duration: 0.8,
+        ease: "bounce.out",
+        scrollTrigger: {
+          trigger: card,
+          start: "top 85%",
+          toggleActions: "play none none none",
+        },
+        delay: i * 0.1,
+      });
+    });
+
+    return () => {
+      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+    };
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -59,7 +322,9 @@ const App: React.FC = () => {
   return (
     <div className="relative min-h-screen bg-[#050505] text-white selection:bg-blue-500/30 selection:text-blue-400 font-['Space_Grotesk']">
       <CursorFollower />
+      <FloatingKeys />
       <FloatingMath />
+      <InteractiveParticles />
 
       {/* Surreal Logic Sidebar - Hidden on Mobile */}
       <div className="fixed right-6 top-1/2 -translate-y-1/2 z-50 hidden xl:flex flex-col gap-6 text-[9px] font-mono text-blue-500 uppercase tracking-[0.2em] bg-black/60 backdrop-blur-2xl p-6 border border-white/5 rounded-[2rem]">
@@ -193,83 +458,189 @@ const App: React.FC = () => {
       <main className="container mx-auto px-6 md:px-8 pt-32 md:pt-48 pb-32">
         {/* Surreal Hero Section */}
         <section
+          ref={heroRef}
           id="hero"
-          className="min-h-[70vh] flex flex-col xl:flex-row items-center justify-between gap-16 md:gap-24 mb-32 md:mb-48"
+          className="min-h-[70vh] flex flex-col xl:flex-row items-center justify-between gap-16 md:gap-24 mb-32 md:mb-48 relative overflow-hidden"
         >
-          <div className="flex-1 space-y-8 md:space-y-12">
+          {/* Parallax Background Elements */}
+          <div className="parallax-layer absolute inset-0 pointer-events-none opacity-30">
+            <div className="parallax-blob-1 absolute top-1/4 left-1/4 w-80 h-80 bg-blue-500/30 rounded-full blur-[100px] animate-pulse"></div>
+            <div
+              className="parallax-blob-2 absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/30 rounded-full blur-[120px] animate-pulse"
+              style={{ animationDelay: "1s" }}
+            ></div>
+            <div
+              className="parallax-blob-3 absolute top-1/2 left-1/2 w-64 h-64 bg-pink-500/20 rounded-full blur-[100px] animate-pulse"
+              style={{ animationDelay: "2s" }}
+            ></div>
+            {/* Floating geometric shapes with scroll animations */}
+            <div
+              className="parallax-shape-1 absolute top-1/3 right-1/3 w-20 h-20 border-2 border-blue-500/30 rotate-45 animate-spin"
+              style={{ animationDuration: "20s" }}
+            ></div>
+            <div
+              className="parallax-shape-2 absolute bottom-1/3 left-1/4 w-16 h-16 border-2 border-purple-500/30 rounded-full animate-bounce"
+              style={{ animationDuration: "3s" }}
+            ></div>
+            <div className="parallax-shape-3 absolute top-2/3 right-1/4 w-12 h-12 bg-cyan-500/20 blur-sm animate-pulse"></div>
+            <div
+              className="parallax-shape-4 absolute top-1/4 right-1/2 w-24 h-24 border-2 border-pink-500/20"
+              style={{ clipPath: "polygon(50% 0%, 0% 100%, 100% 100%)" }}
+            ></div>
+            <div className="parallax-shape-5 absolute bottom-1/2 right-1/5 w-20 h-20 border-2 border-blue-500/20 rounded-full"></div>
+          </div>
+
+          <div className="flex-1 space-y-8 md:space-y-12 relative z-10">
             <div className="space-y-4">
-              <div className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full border border-blue-500/20 bg-blue-500/5 text-blue-400 text-[9px] font-black uppercase tracking-[0.3em]">
-                <span className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse"></span>
+              <div className="hero-subtitle inline-flex items-center gap-3 px-4 py-1.5 rounded-full border border-blue-500/30 bg-blue-500/10 text-blue-400 text-[9px] font-black uppercase tracking-[0.3em] shadow-[0_0_20px_rgba(59,130,246,0.3)]">
+                <span className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse shadow-[0_0_10px_rgba(59,130,246,0.8)]"></span>
                 Senior Mobile Engineer @ Veyseloglu
               </div>
-              <h1 className="text-5xl md:text-7xl lg:text-[10rem] font-black tracking-tighter leading-[0.9] text-white">
-                ESHGIN <br />
-                <span
-                  className="font-black"
+              <div className="hero-title relative z-20">
+                <GlitchText
+                  text="ESHGIN"
+                  className="text-5xl md:text-7xl lg:text-[10rem] font-black tracking-tighter leading-[0.9] text-white block relative z-30 drop-shadow-[0_2px_10px_rgba(255,255,255,0.3)]"
+                />
+                {/* Animated glow behind title */}
+                <div
+                  className="absolute inset-0 blur-2xl opacity-30 animate-pulse pointer-events-none -z-10"
                   style={{
                     background:
-                      "linear-gradient(to right, #3b82f6, #818cf8, #a855f7)",
+                      "radial-gradient(circle, rgba(59,130,246,0.3) 0%, transparent 70%)",
+                  }}
+                />
+                <span
+                  className="text-5xl md:text-7xl lg:text-[10rem] font-black tracking-tighter leading-[0.9] block relative z-30"
+                  style={{
+                    background:
+                      "linear-gradient(to right, #93c5fd, #c4b5fd, #e9d5ff)",
                     WebkitBackgroundClip: "text",
                     WebkitTextFillColor: "transparent",
                     backgroundClip: "text",
+                    textShadow: "0 0 60px rgba(139, 92, 246, 0.9)",
+                    filter:
+                      "drop-shadow(0 4px 8px rgba(0,0,0,0.8)) drop-shadow(0 0 20px rgba(147,197,253,0.5))",
                   }}
                 >
                   farzaliyev
                 </span>
-              </h1>
+              </div>
             </div>
-            <p className="max-w-xl text-gray-500 text-base md:text-lg leading-relaxed font-light">
+            <p className="hero-description max-w-xl text-gray-300 text-base md:text-lg leading-relaxed font-normal relative z-10 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
               Designing high-entropy digital systems. Specialized in{" "}
-              <span className="text-white font-medium">
+              <span className="text-white font-bold drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
                 Native-Bridge Architectures
               </span>{" "}
-              and Surrealist User Interfaces. I build apps that don't just
-              work—they think.
+              and{" "}
+              <span className="text-white font-bold drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+                Surrealist User Interfaces
+              </span>
+              . I build apps that don't just work—they think.
             </p>
-            <div className="flex flex-wrap gap-4 md:gap-6">
-              <a
+            <div className="hero-stats flex flex-wrap gap-6 mb-8 relative z-10">
+              <div className="flex flex-col bg-blue-500/10 px-6 py-3 rounded-xl border border-blue-500/20 backdrop-blur-sm hover:bg-blue-500/20 hover:scale-110 hover:rotate-2 transition-all duration-300 cursor-pointer hover:border-blue-400/40 hover:shadow-[0_0_30px_rgba(59,130,246,0.4)]">
+                <span className="text-3xl font-black text-blue-400 drop-shadow-[0_0_10px_rgba(59,130,246,0.6)]">
+                  <AnimatedCounter end={7} suffix="+" />
+                </span>
+                <span className="text-xs text-gray-400 uppercase tracking-wider font-medium">
+                  Years Exp
+                </span>
+              </div>
+              <div className="flex flex-col bg-purple-500/10 px-6 py-3 rounded-xl border border-purple-500/20 backdrop-blur-sm hover:bg-purple-500/20 hover:scale-110 hover:rotate-2 transition-all duration-300 cursor-pointer hover:border-purple-400/40 hover:shadow-[0_0_30px_rgba(139,92,246,0.4)]">
+                <span className="text-3xl font-black text-purple-400 drop-shadow-[0_0_10px_rgba(139,92,246,0.6)]">
+                  <AnimatedCounter end={50} suffix="+" />
+                </span>
+                <span className="text-xs text-gray-400 uppercase tracking-wider font-medium">
+                  Projects
+                </span>
+              </div>
+              <div className="flex flex-col bg-pink-500/10 px-6 py-3 rounded-xl border border-pink-500/20 backdrop-blur-sm hover:bg-pink-500/20 hover:scale-110 hover:rotate-2 transition-all duration-300 cursor-pointer hover:border-pink-400/40 hover:shadow-[0_0_30px_rgba(236,72,153,0.4)]">
+                <span className="text-3xl font-black text-pink-400 drop-shadow-[0_0_10px_rgba(236,72,153,0.6)]">
+                  <AnimatedCounter end={100} suffix="K+" />
+                </span>
+                <span className="text-xs text-gray-400 uppercase tracking-wider font-medium">
+                  Users
+                </span>
+              </div>
+            </div>
+            <div className="flex flex-wrap gap-4 md:gap-6 relative z-10">
+              <MagneticButton
                 href="mailto:eshqinferzeliyev@gmail.com?subject=Let's%20Connect&body=Hi%20Eshgin,%0A%0AI'd%20like%20to%20discuss%20a%20project%20with%20you."
-                className="flex-1 md:flex-none px-6 md:px-10 py-4 md:py-5 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl font-black text-[10px] md:text-xs uppercase tracking-widest transition-all transform hover:-translate-y-1 active:scale-95 shadow-[0_20px_40px_rgba(59,130,246,0.2)] text-center inline-flex items-center justify-center"
+                className="hero-button flex-1 md:flex-none px-6 md:px-10 py-4 md:py-5 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white rounded-2xl font-black text-[10px] md:text-xs uppercase tracking-widest transition-all shadow-[0_20px_40px_rgba(59,130,246,0.4)] hover:shadow-[0_25px_50px_rgba(59,130,246,0.6)] text-center relative z-10"
               >
-                Initialize Connect
-              </a>
-              <a
+                <span className="relative z-10 flex items-center gap-2 justify-center">
+                  ⚡ Initialize Connect
+                </span>
+              </MagneticButton>
+              <MagneticButton
                 href="./eshgin_farzaliyev_resume.pdf"
-                download
-                className="flex-1 md:flex-none px-6 md:px-10 py-4 md:py-5 bg-white/5 hover:bg-white/10 border border-white/5 rounded-2xl font-black text-[10px] md:text-xs uppercase tracking-widest transition-all text-center inline-flex items-center justify-center"
+                className="hero-button flex-1 md:flex-none px-6 md:px-10 py-4 md:py-5 bg-white/10 hover:bg-white/20 border-2 border-white/20 hover:border-white/30 rounded-2xl font-black text-[10px] md:text-xs uppercase tracking-widest transition-all shadow-[0_10px_30px_rgba(255,255,255,0.1)] hover:shadow-[0_15px_40px_rgba(255,255,255,0.2)] text-center backdrop-blur-sm relative z-10"
               >
-                Download Runtime
-              </a>
+                <span className="relative z-10 flex items-center gap-2 justify-center">
+                  📥 Download Runtime
+                </span>
+              </MagneticButton>
             </div>
           </div>
-          <div className="flex-1 w-full max-w-lg relative group">
-            <div className="absolute inset-0 bg-blue-500/10 blur-[120px] rounded-full group-hover:bg-blue-500/20 transition-all duration-1000"></div>
-            <MobileMockup />
+          <div
+            className="flex-1 w-full max-w-lg relative group"
+            style={{ perspective: "1200px" }}
+          >
+            {/* Multiple glow layers for depth */}
+            <div className="absolute inset-0 bg-blue-500/10 blur-[120px] rounded-full group-hover:bg-blue-500/25 transition-all duration-1000 animate-pulse"></div>
+            <div
+              className="absolute inset-0 bg-purple-500/10 blur-[100px] rounded-full group-hover:bg-purple-500/20 transition-all duration-1000 animate-pulse"
+              style={{ animationDelay: "1s" }}
+            ></div>
+
+            {/* Rotating ring around mockup */}
+            <div
+              className="absolute inset-0 border-2 border-blue-500/10 rounded-full animate-spin"
+              style={{ animationDuration: "30s" }}
+            ></div>
+            <div
+              className="absolute inset-8 border-2 border-purple-500/10 rounded-full animate-spin"
+              style={{
+                animationDuration: "25s",
+                animationDirection: "reverse",
+              }}
+            ></div>
+
+            <div className="relative hover:scale-105 transition-transform duration-700">
+              <MobileMockup />
+            </div>
           </div>
         </section>
 
         {/* Binary Output / Work */}
-        <section id="work" className="mb-32 md:mb-48">
-          <div className="flex flex-col mb-16 md:mb-20">
+        <AnimatedSection id="work" className="mb-32 md:mb-48">
+          <div className="flex flex-col mb-16 md:mb-20 animate-item">
             <h2 className="text-[10px] font-black tracking-[0.6em] text-blue-500 mb-4 uppercase">
               Selected Builds
             </h2>
-            <h3 className="text-4xl md:text-7xl font-black tracking-tighter uppercase">
-              BINARY <span className="text-white/10">OUTPUT</span>
-            </h3>
+            <AnimatedText
+              text="BINARY OUTPUT"
+              as="h3"
+              className="text-4xl md:text-7xl font-black tracking-tighter uppercase"
+              splitType="words"
+            />
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
-            {PROJECTS.map((project) => (
-              <div
+            {PROJECTS.map((project, index) => (
+              <Card3D
                 key={project.id}
-                className="group relative bg-[#0a0a0a] rounded-[2.5rem] md:rounded-[3rem] p-6 md:p-8 border border-white/5 hover:border-blue-500/20 transition-all duration-700 interactive-card overflow-hidden"
+                className="project-card animate-item group relative bg-[#0a0a0a] rounded-[2.5rem] md:rounded-[3rem] p-6 md:p-8 border border-white/5 hover:border-blue-500/30 transition-all duration-700 overflow-hidden"
+                glowColor={index % 2 === 0 ? "#3b82f6" : "#8b5cf6"}
+                intensity={18}
               >
-                <div className="aspect-[16/10] mb-6 md:mb-8 overflow-hidden rounded-[1.5rem] md:rounded-[2rem] bg-black">
+                <div className="aspect-[16/10] mb-6 md:mb-8 overflow-hidden rounded-[1.5rem] md:rounded-[2rem] bg-black relative">
                   <img
                     src={project.imageUrl}
                     alt={project.title}
-                    className="w-full h-full object-cover grayscale group-hover:grayscale-0 opacity-40 group-hover:opacity-100 transition-all duration-1000 scale-100 group-hover:scale-105"
+                    className="w-full h-full object-cover grayscale group-hover:grayscale-0 opacity-40 group-hover:opacity-100 transition-all duration-1000 scale-100 group-hover:scale-110"
+                    style={{ transform: "translateZ(20px)" }}
                   />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 </div>
                 <div className="space-y-4 md:space-y-6">
                   <div className="flex gap-2 flex-wrap">
@@ -315,24 +686,27 @@ const App: React.FC = () => {
                     )}
                   </div>
                 </div>
-              </div>
+              </Card3D>
             ))}
           </div>
-        </section>
+        </AnimatedSection>
 
         {/* Stack Architecture */}
-        <section
+        <AnimatedSection
           id="skills"
           className="grid grid-cols-1 xl:grid-cols-12 gap-16 md:gap-20 mb-32 md:mb-48"
         >
-          <div className="xl:col-span-8 space-y-16 md:space-y-20">
+          <div className="xl:col-span-8 space-y-16 md:space-y-20 animate-item">
             <div>
               <h2 className="text-[10px] font-black tracking-[0.6em] text-blue-500 mb-6 uppercase">
                 Runtime History
               </h2>
               <div className="space-y-10 md:space-y-12 relative before:absolute before:left-0 before:top-2 before:bottom-2 before:w-[1px] before:bg-white/10">
                 {EXPERIENCES.map((exp, idx) => (
-                  <div key={idx} className="relative pl-8 md:pl-12 group">
+                  <div
+                    key={idx}
+                    className="relative pl-8 md:pl-12 group timeline-item"
+                  >
                     <div
                       className={`absolute left-[-5px] top-2 w-[11px] h-[11px] rounded-full border-2 border-black ${exp.isCurrent ? "bg-blue-500 animate-pulse" : "bg-gray-700"}`}
                     ></div>
@@ -365,54 +739,51 @@ const App: React.FC = () => {
             </div>
           </div>
 
-          <div className="xl:col-span-4 h-fit xl:sticky xl:top-32">
+          <div className="xl:col-span-4 h-fit xl:sticky xl:top-32 animate-item">
             <div className="bg-[#0a0a0a] rounded-[2rem] md:rounded-[2.5rem] p-8 md:p-10 border border-white/5 space-y-8 md:space-y-10">
               <h2 className="text-xs font-black tracking-[0.4em] text-white italic border-b border-white/5 pb-6 uppercase">
                 STACK_MANIFEST
               </h2>
               <div className="grid grid-cols-1 gap-6 md:gap-8">
                 {SKILLS.map((skill) => (
-                  <div key={skill.name} className="space-y-3 group">
-                    <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest">
-                      <span className="flex items-center gap-3 text-gray-400 group-hover:text-white transition-colors">
-                        <i
-                          className={`fa-solid ${skill.icon} text-blue-500 text-base`}
-                        ></i>
-                        {skill.name}
-                      </span>
-                      <span className="text-blue-500">{skill.level}%</span>
-                    </div>
-                    <div className="h-[2px] bg-white/5 rounded-full overflow-hidden">
-                      <div
-                        className="h-full bg-blue-500 transition-all duration-[1.5s] ease-out group-hover:bg-cyan-400"
-                        style={{ width: `${skill.level}%` }}
-                      ></div>
-                    </div>
-                  </div>
+                  <SkillBar
+                    key={skill.name}
+                    name={skill.name}
+                    level={skill.level}
+                    icon={`fa-solid ${skill.icon} text-blue-500 text-base`}
+                  />
                 ))}
               </div>
             </div>
           </div>
-        </section>
+        </AnimatedSection>
 
         {/* Debugger Lab */}
-        <section id="lab" className="mb-32 md:mb-48">
-          <div className="text-center mb-16 md:mb-20 space-y-6">
+        <AnimatedSection id="lab" className="mb-32 md:mb-48">
+          <div className="text-center mb-16 md:mb-20 space-y-6 animate-item">
             <h2 className="text-[10px] font-black tracking-[0.6em] text-blue-500 uppercase">
               Interactive Unit
             </h2>
-            <h3 className="text-4xl md:text-7xl font-black tracking-tighter uppercase">
-              DEBUGGER <span className="text-white/10">STRESS_TEST</span>
-            </h3>
+            <AnimatedText
+              text="DEBUGGER STRESS_TEST"
+              as="h3"
+              className="text-4xl md:text-7xl font-black tracking-tighter uppercase"
+              splitType="words"
+            />
             <p className="text-gray-500 max-w-lg mx-auto font-light px-4">
               Simulating high-concurrency event loops. Can you maintain system
               stability under pressure?
             </p>
           </div>
-          <div className="px-4">
-            <BugGame />
+          <div className="px-4 space-y-8">
+            <Card3D className="animate-item" glowColor="#3b82f6" intensity={12}>
+              <BugGame />
+            </Card3D>
+            <Card3D className="animate-item" glowColor="#8b5cf6" intensity={12}>
+              <TypingGame />
+            </Card3D>
           </div>
-        </section>
+        </AnimatedSection>
       </main>
 
       {/* Surreal Footer */}

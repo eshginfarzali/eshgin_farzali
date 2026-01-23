@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import { gsap } from "gsap";
+import React, { useEffect, useRef, useState } from "react";
 
 const MobileMockup: React.FC = () => {
   const [appState, setAppState] = useState<"booting" | "locked" | "ready">(
@@ -11,6 +12,30 @@ const MobileMockup: React.FC = () => {
   const [batteryLevel, setBatteryLevel] = useState<number>(85);
   const [signalStrength, setSignalStrength] = useState<number>(4);
   const [wifiConnected, setWifiConnected] = useState<boolean>(true);
+  const mockupRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    // 3D floating animation for mockup
+    if (mockupRef.current) {
+      gsap.to(mockupRef.current, {
+        rotateY: 5,
+        rotateX: -2,
+        duration: 3,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut",
+      });
+
+      // Subtle up-down floating
+      gsap.to(mockupRef.current, {
+        y: -15,
+        duration: 2.5,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut",
+      });
+    }
+  }, []);
 
   useEffect(() => {
     // Update time every second
@@ -108,6 +133,7 @@ const MobileMockup: React.FC = () => {
 
   return (
     <div
+      ref={mockupRef}
       className="relative w-[280px] h-[580px] mx-auto rounded-[3.5rem] overflow-hidden transition-all duration-700"
       style={{
         background:
@@ -115,6 +141,8 @@ const MobileMockup: React.FC = () => {
         border: "10px solid #FF6B35",
         boxShadow:
           "inset 0 0 20px rgba(0,0,0,0.9), 0 0 60px rgba(59,130,246,0.25), 0 10px 30px rgba(0,0,0,0.5)",
+        transformStyle: "preserve-3d",
+        transform: "translateZ(0)",
       }}
     >
       {/* Notch / Dynamic Island - iPhone 17 Pro Max Style */}
